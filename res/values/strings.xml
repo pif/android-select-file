@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">AFileList</string>
+    <string name="hello_world">MEGA FILE LIST</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">AMainActivity</string>
+    <string name="file_type">Folder or file</string>
+    <string name="cant_read">[%1$s] can\'t be read.</string>
+    <string name="warning">Oops…</string>
+    <string name="title_activity_test">ATestActivity</string>
+
+</resources>
