@@ -3,50 +3,47 @@ package com.example.afilelist;
 import java.io.File;
 import java.io.FileFilter;
 
-public enum SelectMode {
-	OPEN_FILE(new FileFilter(){
+public enum SelectMode implements FileFilter {
+	OPEN_FILE() {
+		@Override
+		public boolean isOk(File file) {
+			return file.canRead() && file.isFile();
+		}
+
 		@Override
 		public boolean accept(File pathname) {
-			// accept files and folders... everything
+			// show all files
 			return true;
-		}}) {
-			@Override
-			public boolean isOk(File file) {
-				return file.canRead() && file.isFile();
-			}
-		}, 
-	OPEN_FOLDER(new FileFilter(){
+		}
+	},
+	OPEN_FOLDER() {
+		@Override
+		public boolean isOk(File file) {
+			return file.isDirectory();
+		}
+
 		@Override
 		public boolean accept(File pathname) {
 			// accept folders only
 			return pathname.isDirectory();
-		}}) {
-			@Override
-			public boolean isOk(File file) {
-				return file.isDirectory();
-			}
-		},  
-	SAVE_FILE(new FileFilter(){
+		}
+	},
+	SAVE_FILE() {
 		@Override
 		public boolean accept(File pathname) {
 			// accept files and folders... everything
 			return true;
-		}}) {
-			@Override
-			public boolean isOk(File file) {
-				return file.canWrite();
-			}
-		}, ;
+		}
 
-	private SelectMode(FileFilter filter) {
-		this.fileFilter = filter;
-	}
-	
-	private FileFilter fileFilter;
-	
-	public FileFilter getFileFilter() {
-		return fileFilter;
-	}
-	
+		@Override
+		public boolean isOk(File file) {
+			File parentFile = file.getParentFile();
+			if (parentFile != null) {
+				return parentFile.canWrite();
+			}
+			return true;
+		}
+	};
 	public abstract boolean isOk(File file);
+
 }

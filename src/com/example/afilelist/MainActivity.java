@@ -14,10 +14,10 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -52,6 +52,9 @@ public class MainActivity extends ListActivity {
         currentPath = getIntent().getStringExtra(EX_PATH);
         selectMode = (SelectMode) getIntent().getSerializableExtra(EX_STYLE);
         
+        setUIhandlers();
+        updateUI();
+        
         File f = new File(currentPath);
         simpleAdapter = new SimpleAdapter(getBaseContext(), currentFileList, 
         		R.layout.item, 
@@ -63,7 +66,43 @@ public class MainActivity extends ListActivity {
         setListAdapter(simpleAdapter);
     }
     
-    private void updateCurrentList(File f) {
+	private void setUIhandlers() {
+		Button selectFolder = (Button) findViewById(R.id.select_folder);
+		selectFolder.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				selectResult(new File(currentPath));
+			}
+		});
+		
+		final EditText fileName = (EditText) findViewById(R.id.save_file_name);
+		
+		Button createFile = (Button) findViewById(R.id.save_file);
+		createFile.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				File path = new File(currentPath);
+				File newFile = new File(path, fileName.getText().toString());
+				selectResult(newFile);
+			}
+		});
+	}
+
+	private void updateUI() {
+		if (SelectMode.OPEN_FOLDER.equals(selectMode)
+			|| SelectMode.SAVE_FILE.equals(selectMode)) {
+			View controls = findViewById(R.id.controls);
+			controls.setVisibility(View.VISIBLE);
+		}
+
+		if (SelectMode.OPEN_FOLDER.equals(selectMode)) {
+			View controls = findViewById(R.id.select_folder);
+			controls.setVisibility(View.VISIBLE);
+		} else if (SelectMode.SAVE_FILE.equals(selectMode)) {
+			View controls = findViewById(R.id.controls_save);
+			controls.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void updateCurrentList(File f) {
 		List<Map<String, Object>> newData = getData(f);
 		currentPath = f.getAbsolutePath();
 		currentFileList.clear();
@@ -92,7 +131,7 @@ public class MainActivity extends ListActivity {
     		return Collections.emptyList();
     	}
     	
-    	File[] listFiles = folder.listFiles(selectMode.getFileFilter()); 
+    	File[] listFiles = folder.listFiles(selectMode); 
     	// TODO filter files: filterData(listFiles);
     	sortData(listFiles);
     	
@@ -135,16 +174,25 @@ public class MainActivity extends ListActivity {
 	    		updateCurrentList(f);
 	    	} else {
 	    		// select smth?
-	    		Intent result = new Intent();
-	    		result.putExtra(EX_PATH_RESULT, f.getAbsolutePath());
-	    		setResult(RESULT_OK, result);
-	    		Toast.makeText(this, "Selected: "+f.getAbsolutePath(), Toast.LENGTH_LONG).show();
-	    		finish();
+	    		selectResult(f);
 	    	}
     	}
     	
     	super.onListItemClick(l, v, position, id);
     }
+
+	private void selectResult(File f) {
+		if (!selectMode.isOk(f)) {
+			sayToUser(getString(R.string.warning), getString(R.string.unacceptable, f.getName()));
+			return;
+		}
+		
+		Intent result = new Intent();
+		result.putExtra(EX_PATH_RESULT, f.getAbsolutePath());
+		setResult(RESULT_OK, result);
+		Toast.makeText(this, "Selected: "+f.getAbsolutePath(), Toast.LENGTH_LONG).show();
+		finish();
+	}
     
 	private void sayToUser(String title, String message) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
