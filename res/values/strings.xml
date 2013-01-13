@@ -12,4 +12,5 @@
     <string name="select_current_folder">Select Current Folder</string>
     <string name="enter_file_name">Enter file name here…</string>
     <string name="save_file">Create</string>
+    <string name="save_file_overwrite">Overwrite existing file [%1$s]?</string>
 </resources>

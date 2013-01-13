@@ -12,15 +12,14 @@ import java.util.Map;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 
@@ -47,13 +46,14 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
         setResult(RESULT_CANCELED);
         
-        // TODO get that from extras
-//        currentPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         currentPath = getIntent().getStringExtra(EX_PATH);
-        selectMode = (SelectMode) getIntent().getSerializableExtra(EX_STYLE);
+        if (currentPath == null) {
+        	currentPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        }
+        selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectMode.OPEN_FILE), this);
         
         setUIhandlers();
-        updateUI();
+        selectMode.updateUI();
         
         File f = new File(currentPath);
         simpleAdapter = new SimpleAdapter(getBaseContext(), currentFileList, 
@@ -67,42 +67,27 @@ public class MainActivity extends ListActivity {
     }
     
 	private void setUIhandlers() {
+		// OPEN_FOLDER additional UI
 		Button selectFolder = (Button) findViewById(R.id.select_folder);
 		selectFolder.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				selectResult(new File(currentPath));
+				selectMode.select(new File(currentPath));
 			}
 		});
-		
+
+		// SAVE_FILE additional UI
 		final EditText fileName = (EditText) findViewById(R.id.save_file_name);
-		
 		Button createFile = (Button) findViewById(R.id.save_file);
 		createFile.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				File path = new File(currentPath);
 				File newFile = new File(path, fileName.getText().toString());
-				selectResult(newFile);
+				selectMode.select(newFile);
 			}
 		});
 	}
 
-	private void updateUI() {
-		if (SelectMode.OPEN_FOLDER.equals(selectMode)
-			|| SelectMode.SAVE_FILE.equals(selectMode)) {
-			View controls = findViewById(R.id.controls);
-			controls.setVisibility(View.VISIBLE);
-		}
-
-		if (SelectMode.OPEN_FOLDER.equals(selectMode)) {
-			View controls = findViewById(R.id.select_folder);
-			controls.setVisibility(View.VISIBLE);
-		} else if (SelectMode.SAVE_FILE.equals(selectMode)) {
-			View controls = findViewById(R.id.controls_save);
-			controls.setVisibility(View.VISIBLE);
-		}
-	}
-
-	private void updateCurrentList(File f) {
+	void updateCurrentList(File f) {
 		List<Map<String, Object>> newData = getData(f);
 		currentPath = f.getAbsolutePath();
 		currentFileList.clear();
@@ -110,20 +95,21 @@ public class MainActivity extends ListActivity {
 		simpleAdapter.notifyDataSetChanged();
 	}
 
-	private void sortData(File[] files) {
-		Arrays.sort(files, new Comparator<File>() {
-			@Override
-			public int compare(File lhs, File rhs) {
-				// file or folder
-				int lhsType = lhs.isDirectory() ? 0 : 1;
-				int rhsType = rhs.isDirectory() ? 0 : 1;
-				if (lhsType != rhsType) {
-					return lhsType - rhsType;
-				}
-				return lhs.getName().compareToIgnoreCase(rhs.getName());
+	private static final Comparator<File> sorter = new Comparator<File>() {
+		@Override
+		public int compare(File lhs, File rhs) {
+			// file or folder
+			int lhsType = lhs.isDirectory() ? 0 : 1;
+			int rhsType = rhs.isDirectory() ? 0 : 1;
+			if (lhsType != rhsType) {
+				return lhsType - rhsType;
 			}
-			
-		});
+			return lhs.getName().compareToIgnoreCase(rhs.getName());
+		}
+	}; 
+	
+	private void sortData(File[] files) {
+		Arrays.sort(files, sorter);
 	}
 
 	private List<Map<String,Object>> getData(File folder) {
@@ -131,8 +117,8 @@ public class MainActivity extends ListActivity {
     		return Collections.emptyList();
     	}
     	
+    	// selectMode specifies file-filtering rules
     	File[] listFiles = folder.listFiles(selectMode); 
-    	// TODO filter files: filterData(listFiles);
     	sortData(listFiles);
     	
     	List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
@@ -169,32 +155,22 @@ public class MainActivity extends ListActivity {
     	if (!f.canRead()) {
     		sayToUser(getString(R.string.warning), getString(R.string.cant_read, f.getName()));
     	} else {
+    		
+    		selectMode.onItemClicked(f);
+    		// TODO move to SelectMode
     		// readeable
-	    	if (f.isDirectory()) {
+	    	/*if (f.isDirectory()) {
 	    		updateCurrentList(f);
 	    	} else {
 	    		// select smth?
 	    		selectResult(f);
-	    	}
+	    	}*/
     	}
     	
     	super.onListItemClick(l, v, position, id);
     }
-
-	private void selectResult(File f) {
-		if (!selectMode.isOk(f)) {
-			sayToUser(getString(R.string.warning), getString(R.string.unacceptable, f.getName()));
-			return;
-		}
-		
-		Intent result = new Intent();
-		result.putExtra(EX_PATH_RESULT, f.getAbsolutePath());
-		setResult(RESULT_OK, result);
-		Toast.makeText(this, "Selected: "+f.getAbsolutePath(), Toast.LENGTH_LONG).show();
-		finish();
-	}
     
-	private void sayToUser(String title, String message) {
+	void sayToUser(String title, String message) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
 				.setTitle(title)
 				.setMessage(message)
@@ -222,5 +198,4 @@ public class MainActivity extends ListActivity {
 			return super.onKeyDown(keyCode, event);
 		}
 	}
-
 }
