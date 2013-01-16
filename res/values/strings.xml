@@ -6,6 +6,8 @@
     <string name="title_activity_main">AMainActivity</string>
     <string name="file_type">Folder or file</string>
     <string name="cant_read">[%1$s] can\'t be read.</string>
+    <string name="cant_write_parent_dir">[%1$s] can\'t be written into selected folder.</string>
+    <string name="do_nothing"></string>
     <string name="unacceptable">[%1$s] can\'t be selected.</string>
     <string name="warning">Oops…</string>
     <string name="title_activity_test">ATestActivity</string>
