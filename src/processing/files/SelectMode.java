@@ -1,4 +1,4 @@
-package com.example.afilelist;
+package processing.files;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -9,12 +9,11 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public abstract class SelectMode implements FileFilter {
 
-  public static final int OPEN_FILE = 1;
-  public static final int OPEN_FOLDER = 2;
+  public static final int SELECT_FILE = 1;
+  public static final int SELECT_FOLDER = 2;
   public static final int SAVE_FILE = 4;
 
   /**
@@ -27,7 +26,7 @@ public abstract class SelectMode implements FileFilter {
    * @param pathname file to check.
    * @return ACCEPTABLE, if file is ok.
    * DONT_NOTIFY if no action should be performed,
-   * or any other R.string.* resource id, in case of problems.
+   * or any other R.string.fs_* resource id, in case of problems.
    */
   abstract int isOk(File pathname);
 
@@ -45,11 +44,11 @@ public abstract class SelectMode implements FileFilter {
    * @param activity
    * @return selectMode
    */
-  public static SelectMode createSelectMode(int type, SelectActivity activity) {
+  static SelectMode createSelectMode(int type, SelectActivity activity) {
     switch (type) {
-    case OPEN_FILE:
+    case SELECT_FILE:
       return new OPEN_FILE(activity);
-    case OPEN_FOLDER:
+    case SELECT_FOLDER:
       return new OPEN_FOLDER(activity);
     case SAVE_FILE:
       return new SAVE_FILE(activity);
@@ -59,7 +58,7 @@ public abstract class SelectMode implements FileFilter {
   }
 
   private static final int ACCEPTABLE = 0;
-  private static final int DONT_NOTIFY = R.string.do_nothing;
+  private static final int DONT_NOTIFY = R.string.fs_do_nothing;
 
   /**
    * This method is called from the bound activity, when result should be selected.
@@ -67,20 +66,18 @@ public abstract class SelectMode implements FileFilter {
    */
   public void selectResult(File f) {
     int isOkMessage = isOk(f);
-    switch (isOkMessage) {
-    case DONT_NOTIFY:
-      break;
-    case ACCEPTABLE:
+    if (isOkMessage == DONT_NOTIFY) {
+      // do nothing
+    } else if (isOkMessage == ACCEPTABLE) {
       sendResult(f);
-      break;
-    default:
-      sayToUser(R.string.warning, isOkMessage, f.getName());
+    } else {
+      sayToUser(R.string.fs_warning, isOkMessage, f.getName());
     }
   }
 
   public void onItemClicked(File pathname) {
     if (!pathname.canRead()) {
-      sayToUser(R.string.warning, R.string.cant_read, pathname.getName());
+      sayToUser(R.string.fs_warning, R.string.fs_cant_read, pathname.getName());
     } else {
       onItemClickedImpl(pathname);
     }
@@ -112,7 +109,7 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     public int isOk(File file) {
-      return (file.canRead() && file.isFile()) ? ACCEPTABLE : R.string.unacceptable;
+      return (file.canRead() && file.isFile()) ? ACCEPTABLE : R.string.fs_unacceptable;
     }
 
     @Override
@@ -142,7 +139,7 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     public int isOk(File file) {
-      return file.isDirectory() ? ACCEPTABLE : R.string.unacceptable;
+      return file.isDirectory() ? ACCEPTABLE : R.string.fs_unacceptable;
     }
 
     @Override
@@ -187,7 +184,7 @@ public abstract class SelectMode implements FileFilter {
     @Override
     public int isOk(final File file) {
       if (!file.getParentFile().canWrite()) {
-        return R.string.cant_write_parent_dir;
+        return R.string.fs_cant_write_parent_dir;
       }
       if (!file.exists()) {
         return ACCEPTABLE;
@@ -204,8 +201,8 @@ public abstract class SelectMode implements FileFilter {
             }
           }
         };
-        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle(activity.getString(R.string.warning))
-            .setMessage(activity.getString(R.string.save_file_overwrite, file.getName()))
+        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle(activity.getString(R.string.fs_warning))
+            .setMessage(activity.getString(R.string.fs_save_file_overwrite, file.getName()))
             .setPositiveButton(android.R.string.yes, yesNoListener)
             .setNegativeButton(android.R.string.no, yesNoListener).create();
         dialog.show();
@@ -241,14 +238,5 @@ public abstract class SelectMode implements FileFilter {
       View additionalControls = activity.findViewById(R.id.controls_save);
       additionalControls.setVisibility(View.VISIBLE);
     }
-
-    // @Override
-    // public void select(File f) {
-    // if (isOk(f)) {
-    // sendResult(f);
-    // }// else {
-    // // sayToUser(R.string.warning, R.string.unacceptable, f.getName());
-    // //}
-    // }
   }
 }

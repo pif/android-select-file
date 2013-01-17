@@ -1,4 +1,4 @@
-package com.example.afilelist;
+package processing.files;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
@@ -66,7 +65,7 @@ public class SelectActivity extends ListActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_select_activity);
     setResult(RESULT_CANCELED);
 
     currentPath = getIntent().getStringExtra(EX_PATH);
@@ -80,11 +79,11 @@ public class SelectActivity extends ListActivity {
       }
     }
     
-    selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectMode.OPEN_FILE), this);
+    selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectMode.SELECT_FILE), this);
     selectMode.updateUI();
 
     File f = new File(currentPath);
-    simpleAdapter = new SimpleAdapter(this, currentFileList, R.layout.item, new String[] { I_FILENAME,
+    simpleAdapter = new SimpleAdapter(this, currentFileList, R.layout.select_file_item, new String[] { I_FILENAME,
         I_FULL_PATH, I_TYPE }, new int[] { R.id.fileName, R.id.fullPath, R.id.fileType });
 
     updateCurrentList(f);

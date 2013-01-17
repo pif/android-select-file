@@ -1,0 +1,14 @@
+<resources>
+    <string name="fs_title_activity_main">AMainActivity</string>
+    <string name="fs_file_type">Folder or file</string>
+    <string name="fs_cant_read">[%1$s] can\'t be read.</string>
+    <string name="fs_cant_write_parent_dir">[%1$s] can\'t be written into selected folder.</string>
+    <string name="fs_do_nothing"></string>
+    <string name="fs_unacceptable">[%1$s] can\'t be selected.</string>
+    <string name="fs_warning">Oops…</string>
+    <string name="fs_title_activity_test">ATestActivity</string>
+    <string name="fs_select_current_folder">Select Current Folder</string>
+    <string name="fs_enter_file_name">Enter file name here…</string>
+    <string name="fs_save_file">Create</string>
+    <string name="fs_save_file_overwrite">Overwrite existing file [%1$s]?</string>
+</resources>

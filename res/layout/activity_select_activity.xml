@@ -15,7 +15,7 @@
             android:id="@+id/select_folder"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/select_current_folder"
+            android:text="@string/fs_select_current_folder"
             android:visibility="gone"/>
 
         <LinearLayout
@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/enter_file_name"
+                android:hint="@string/fs_enter_file_name"
                 android:singleLine="true"
                 android:text="" />
 
@@ -38,7 +38,7 @@
                 android:id="@+id/save_file"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/save_file" />
+                android:text="@string/fs_save_file" />
         </LinearLayout>
     </LinearLayout>
 
