@@ -10,7 +10,7 @@ functionality.
 
 Usage
 -----
-
+```java
 // define somewhere a constant for the activity result.
 protected static final int PATH_RESULT = 123;
 
@@ -21,5 +21,5 @@ protected static final int PATH_RESULT = 123;
   i.putExtra(SelectActivity.EX_PATH, Environment.getExternalStorageDirectory().getAbsolutePath());
   i.putExtra(SelectActivity.EX_STYLE, SelectMode.OPEN_FILE);
   startActivityForResult(i, PATH_RESULT);
-
+```
 @author ostap.andrusiv
