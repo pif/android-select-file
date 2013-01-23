@@ -16,6 +16,17 @@ public abstract class SelectMode implements FileFilter {
   public static final int SELECT_FOLDER = 2;
   public static final int SAVE_FILE = 4;
 
+  public static final String fs_file_type = "Folder or file";
+  public static final String fs_cant_read = "[%1$s] can\'t be read.";
+  public static final String fs_cant_write_parent_dir = "[%1$s] can\'t be written into selected folder.";
+  public static final String fs_do_nothing = "";
+  public static final String fs_unacceptable = "[%1$s] can\'t be selected.";
+  public static final String fs_warning = "Oops…";
+  public static final String fs_title_activity_test = "ATestActivity";
+  public static final String fs_select_current_folder = "Select Current Folder";
+  public static final String fs_enter_file_name = "Enter file name here…";
+  public static final String fs_save_file = "Create";
+  public static final String fs_save_file_overwrite = "Overwrite existing file [%1$s]?";  
   /**
    * Initialises custom UI elements for the selector.
    */
@@ -28,7 +39,7 @@ public abstract class SelectMode implements FileFilter {
    * DONT_NOTIFY if no action should be performed,
    * or any other R.string.fs_* resource id, in case of problems.
    */
-  abstract int isOk(File pathname);
+  abstract String isOk(File pathname);
 
   /**
    * this method get's called when ListItem from the file list is clicked. 
@@ -57,27 +68,27 @@ public abstract class SelectMode implements FileFilter {
     }
   }
 
-  private static final int ACCEPTABLE = 0;
-  private static final int DONT_NOTIFY = R.string.fs_do_nothing;
+  private static final String ACCEPTABLE = "acpt";
+  private static final String DONT_NOTIFY = "dont";
 
   /**
    * This method is called from the bound activity, when result should be selected.
    * @param f
    */
   public void selectResult(File f) {
-    int isOkMessage = isOk(f);
-    if (isOkMessage == DONT_NOTIFY) {
+    String isOkMessage = isOk(f);
+    if (DONT_NOTIFY.equals(isOkMessage)) {
       // do nothing
-    } else if (isOkMessage == ACCEPTABLE) {
+    } else if (ACCEPTABLE.equals(isOkMessage)) {
       sendResult(f);
     } else {
-      sayToUser(R.string.fs_warning, isOkMessage, f.getName());
+      sayToUser(fs_warning, isOkMessage, f.getName());
     }
   }
 
   public void onItemClicked(File pathname) {
     if (!pathname.canRead()) {
-      sayToUser(R.string.fs_warning, R.string.fs_cant_read, pathname.getName());
+      sayToUser(fs_warning, fs_cant_read, pathname.getName());
     } else {
       onItemClickedImpl(pathname);
     }
@@ -91,10 +102,10 @@ public abstract class SelectMode implements FileFilter {
     activity.finish();
   }
 
-  void sayToUser(int title, int message, Object... params) {
+  void sayToUser(String title, String message, Object... params) {
     AlertDialog dialog = new AlertDialog.Builder(activity)
-      .setTitle(activity.getString(title))
-      .setMessage(activity.getString(message, params))
+      .setTitle(title)
+      .setMessage(String.format(message, params))
       .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
         }
@@ -108,8 +119,8 @@ public abstract class SelectMode implements FileFilter {
     }
 
     @Override
-    public int isOk(File file) {
-      return (file.canRead() && file.isFile()) ? ACCEPTABLE : R.string.fs_unacceptable;
+    public String isOk(File file) {
+      return (file.canRead() && file.isFile()) ? ACCEPTABLE : fs_unacceptable;
     }
 
     @Override
@@ -138,8 +149,8 @@ public abstract class SelectMode implements FileFilter {
     }
 
     @Override
-    public int isOk(File file) {
-      return file.isDirectory() ? ACCEPTABLE : R.string.fs_unacceptable;
+    public String isOk(File file) {
+      return file.isDirectory() ? ACCEPTABLE : fs_unacceptable;
     }
 
     @Override
@@ -182,9 +193,9 @@ public abstract class SelectMode implements FileFilter {
     }
 
     @Override
-    public int isOk(final File file) {
+    public String isOk(final File file) {
       if (!file.getParentFile().canWrite()) {
-        return R.string.fs_cant_write_parent_dir;
+        return fs_cant_write_parent_dir;
       }
       if (!file.exists()) {
         return ACCEPTABLE;
