@@ -14,10 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
 /**
@@ -68,7 +65,7 @@ public class SelectActivity extends ListActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(buildUI());
+    setContentView(SelectConstants.generateMainActivityViews(this));
     setResult(RESULT_CANCELED);
 
     currentPath = getIntent().getStringExtra(EX_PATH);
@@ -82,7 +79,7 @@ public class SelectActivity extends ListActivity {
       }
     }
     
-    selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectMode.SELECT_FILE), this);
+    selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectConstants.SELECT_FILE), this);
     selectMode.updateUI();
 
     File f = new File(currentPath);
@@ -92,83 +89,6 @@ public class SelectActivity extends ListActivity {
     updateCurrentList(f);
 
     setListAdapter(simpleAdapter);
-  }
-
-  private View buildUI() {
-    RelativeLayout rl = new RelativeLayout(this);
-    rl.setLayoutParams(new LayoutParams(
-        LayoutParams.MATCH_PARENT, 
-        LayoutParams.MATCH_PARENT));
-    
-    LinearLayout ll = new LinearLayout(this);
-    RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(
-        LayoutParams.MATCH_PARENT, 
-        LayoutParams.WRAP_CONTENT);
-    rllp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-    ll.setLayoutParams(rllp);
-    ll.setOrientation(LinearLayout.VERTICAL);
-    ll.setVisibility(View.GONE);
-    
-    // buttonzzzz
-    
-    
-    
-    return ;
-    
-    /***
-     * 
-   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <LinearLayout
-        android:id="@+id/controls"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical" 
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/select_folder"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fs_select_current_folder"
-            android:visibility="gone"/>
-
-        <LinearLayout
-            android:id="@+id/controls_save"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" 
-            android:visibility="gone">
-
-            <EditText
-                android:id="@+id/save_file_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/fs_enter_file_name"
-                android:singleLine="true"
-                android:text="" />
-
-            <Button
-                android:id="@+id/save_file"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fs_save_file" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/controls" />
-
-</RelativeLayout>
-     */
   }
 
   void updateCurrentList(File f) {

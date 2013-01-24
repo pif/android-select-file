@@ -12,21 +12,6 @@ import android.widget.EditText;
 
 public abstract class SelectMode implements FileFilter {
 
-  public static final int SELECT_FILE = 1;
-  public static final int SELECT_FOLDER = 2;
-  public static final int SAVE_FILE = 4;
-
-  public static final String fs_file_type = "Folder or file";
-  public static final String fs_cant_read = "[%1$s] can\'t be read.";
-  public static final String fs_cant_write_parent_dir = "[%1$s] can\'t be written into selected folder.";
-  public static final String fs_do_nothing = "";
-  public static final String fs_unacceptable = "[%1$s] can\'t be selected.";
-  public static final String fs_warning = "Oops…";
-  public static final String fs_title_activity_test = "ATestActivity";
-  public static final String fs_select_current_folder = "Select Current Folder";
-  public static final String fs_enter_file_name = "Enter file name here…";
-  public static final String fs_save_file = "Create";
-  public static final String fs_save_file_overwrite = "Overwrite existing file [%1$s]?";  
   /**
    * Initialises custom UI elements for the selector.
    */
@@ -57,11 +42,11 @@ public abstract class SelectMode implements FileFilter {
    */
   static SelectMode createSelectMode(int type, SelectActivity activity) {
     switch (type) {
-    case SELECT_FILE:
+    case SelectConstants.SELECT_FILE:
       return new OPEN_FILE(activity);
-    case SELECT_FOLDER:
+    case SelectConstants.SELECT_FOLDER:
       return new OPEN_FOLDER(activity);
-    case SAVE_FILE:
+    case SelectConstants.SAVE_FILE:
       return new SAVE_FILE(activity);
     default:
       throw new IllegalArgumentException("Only OPEN_FILE, OPEN_FOLDER, SAVE_FILE allowed");
@@ -82,13 +67,13 @@ public abstract class SelectMode implements FileFilter {
     } else if (ACCEPTABLE.equals(isOkMessage)) {
       sendResult(f);
     } else {
-      sayToUser(fs_warning, isOkMessage, f.getName());
+      sayToUser(SelectConstants.fs_warning, isOkMessage, f.getName());
     }
   }
 
   public void onItemClicked(File pathname) {
     if (!pathname.canRead()) {
-      sayToUser(fs_warning, fs_cant_read, pathname.getName());
+      sayToUser(SelectConstants.fs_warning, SelectConstants.fs_cant_read, pathname.getName());
     } else {
       onItemClickedImpl(pathname);
     }
@@ -120,7 +105,7 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     public String isOk(File file) {
-      return (file.canRead() && file.isFile()) ? ACCEPTABLE : fs_unacceptable;
+      return (file.canRead() && file.isFile()) ? ACCEPTABLE : SelectConstants.fs_unacceptable;
     }
 
     @Override
@@ -150,7 +135,7 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     public String isOk(File file) {
-      return file.isDirectory() ? ACCEPTABLE : fs_unacceptable;
+      return file.isDirectory() ? ACCEPTABLE : SelectConstants.fs_unacceptable;
     }
 
     @Override
@@ -167,16 +152,16 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     void updateUI() {
-      Button selectFolder = (Button) activity.findViewById(R.id.select_folder);
+      Button selectFolder = (Button) activity.findViewById(SelectConstants.RID_FOLDER_BTN);
       selectFolder.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
           OPEN_FOLDER.this.selectResult(new File(activity.getCurrentPath()));
         }
       });
 
-      View controls = activity.findViewById(R.id.controls);
+      View controls = activity.findViewById(SelectConstants.RID_CONTROLS_LL);
       controls.setVisibility(View.VISIBLE);
-      View additionalControls = activity.findViewById(R.id.select_folder);
+      View additionalControls = activity.findViewById(SelectConstants.RID_FOLDER_BTN);
       additionalControls.setVisibility(View.VISIBLE);
     }
   }
@@ -195,7 +180,7 @@ public abstract class SelectMode implements FileFilter {
     @Override
     public String isOk(final File file) {
       if (!file.getParentFile().canWrite()) {
-        return fs_cant_write_parent_dir;
+        return SelectConstants.fs_cant_write_parent_dir;
       }
       if (!file.exists()) {
         return ACCEPTABLE;
@@ -212,8 +197,8 @@ public abstract class SelectMode implements FileFilter {
             }
           }
         };
-        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle(activity.getString(R.string.fs_warning))
-            .setMessage(activity.getString(R.string.fs_save_file_overwrite, file.getName()))
+        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle(SelectConstants.fs_warning)
+            .setMessage(String.format(SelectConstants.fs_save_file_overwrite, file.getName()))
             .setPositiveButton(android.R.string.yes, yesNoListener)
             .setNegativeButton(android.R.string.no, yesNoListener).create();
         dialog.show();
@@ -226,7 +211,7 @@ public abstract class SelectMode implements FileFilter {
       if (f.isDirectory()) {
         activity.updateCurrentList(f);
       } else {
-        EditText editText = (EditText) activity.findViewById(R.id.save_file_name);
+        EditText editText = (EditText) activity.findViewById(SelectConstants.RID_NAME_ET);
         editText.setText(f.getName());
       }
       // result is returned with the help of "Save file" button
@@ -234,8 +219,8 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     void updateUI() {
-      final EditText fileName = (EditText) activity.findViewById(R.id.save_file_name);
-      Button createFile = (Button) activity.findViewById(R.id.save_file);
+      final EditText fileName = (EditText) activity.findViewById(SelectConstants.RID_NAME_ET);
+      Button createFile = (Button) activity.findViewById(SelectConstants.RID_SAVE_BTN);
       createFile.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
           File path = new File(activity.getCurrentPath());
@@ -244,9 +229,9 @@ public abstract class SelectMode implements FileFilter {
         }
       });
 
-      View controls = activity.findViewById(R.id.controls);
+      View controls = activity.findViewById(SelectConstants.RID_CONTROLS_LL);
       controls.setVisibility(View.VISIBLE);
-      View additionalControls = activity.findViewById(R.id.controls_save);
+      View additionalControls = activity.findViewById(SelectConstants.RID_SAVE_CTLS_LL);
       additionalControls.setVisibility(View.VISIBLE);
     }
   }
