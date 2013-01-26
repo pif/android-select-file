@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.ListActivity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
@@ -44,20 +43,12 @@ import android.widget.TextView;
  */
 public class SelectActivity extends ListActivity {
 
-  /*private static final String I_FULL_PATH = "fullPath";
-  private static final String I_FILENAME = "fileName";
-  private static final String I_TYPE = "fileType";
-  private static final int I_TYPE_FOLDER = R.drawable.type_folder;
-  private static final int I_TYPE_FILE = R.drawable.type_file;
-  private static final int I_TYPE_UP = R.drawable.type_up;*/
-
   private static final String CURRENT_PATH = "currentPath";
 
   public static final String EX_PATH = "extraPath";
   public static final String EX_STYLE = "selectStyle";
   public static final String EX_PATH_RESULT = "pathResult";
 
-  //private List<Map<String, Object>> currentFileList = new ArrayList<Map<String, Object>>();
   private String currentPath = "";
   private ArrayAdapter<FileItem> simpleAdapter = null;
 
@@ -84,8 +75,6 @@ public class SelectActivity extends ListActivity {
     selectMode.updateUI();
 
     File f = new File(currentPath);
-//    simpleAdapter = new SimpleAdapter(this, currentFileList, R.layout.select_file_item, new String[] { I_FILENAME,
-//        I_FULL_PATH, I_TYPE }, new int[] { R.id.fileName, R.id.fullPath, R.id.fileType });
 
     simpleAdapter = new ArrayAdapter<FileItem>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
       @Override
@@ -117,6 +106,10 @@ public class SelectActivity extends ListActivity {
     simpleAdapter.notifyDataSetChanged();
   }
 
+  /**
+   * 1. directories first
+   * 2. dirs/files are sorted ignoring case
+   */
   private static final Comparator<File> sorter = new Comparator<File>() {
     @Override
     public int compare(File lhs, File rhs) {
@@ -148,7 +141,7 @@ public class SelectActivity extends ListActivity {
     // add "Up one level" item
     File parentFolder = folder.getParentFile();
     if (parentFolder != null) {
-      result.add(new FileItem("Up", FileType.Up, parentFolder));
+      result.add(new FileItem(SelectConstants.fs_up_item, FileType.Up, parentFolder));
     }
 
     for (int i = 0; i < listFiles.length; i++) {
@@ -177,7 +170,7 @@ public class SelectActivity extends ListActivity {
     if ((keyCode == KeyEvent.KEYCODE_BACK)) {
       File parentFile = new File(currentPath).getParentFile();
       if (parentFile == null) {
-        // finita la comedia
+        // finita la comedia: returning to the calling activity
         return super.onKeyDown(keyCode, event);
       } else {
         updateCurrentList(parentFile);

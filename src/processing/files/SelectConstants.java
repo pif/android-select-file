@@ -15,6 +15,9 @@ public final class SelectConstants {
   public static final int SELECT_FOLDER = 2;
   public static final int SAVE_FILE = 4;
 
+  /**
+   * values copied from strings.xml
+   */
   public static final String fs_file_type = "Folder or file";
   public static final String fs_cant_read = "[%1$s] can\'t be read.";
   public static final String fs_cant_write_parent_dir = "[%1$s] can\'t be written into selected folder.";
@@ -26,6 +29,7 @@ public final class SelectConstants {
   public static final String fs_enter_file_name = "Enter file name here…";
   public static final String fs_save_file = "Create";
   public static final String fs_save_file_overwrite = "Overwrite existing file [%1$s]?";  
+  public static final String fs_up_item = "Up..";
   
   public static final int RID_WRAPPER_RL = 10;
   public static final int RID_CONTROLS_LL = 20;
