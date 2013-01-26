@@ -5,20 +5,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 /**
- * Activity, which provides 
+ * Activity, which provides
  *  <ul>
  *    <li>select file,</li>
  *    <li>select folder,</li>
@@ -30,7 +30,7 @@ import android.widget.SimpleAdapter;
  * <pre>
  *   // define somewhere
  *   protected static final int PATH_RESULT = 123;
- *   
+ *
  *   // ...
  *   // call this:
  *   Intent i = new Intent(TestActivity.this, SelectActivity.class);
@@ -43,12 +43,12 @@ import android.widget.SimpleAdapter;
  */
 public class SelectActivity extends ListActivity {
 
-  private static final String I_FULL_PATH = "fullPath";
+  /*private static final String I_FULL_PATH = "fullPath";
   private static final String I_FILENAME = "fileName";
   private static final String I_TYPE = "fileType";
   private static final int I_TYPE_FOLDER = R.drawable.type_folder;
   private static final int I_TYPE_FILE = R.drawable.type_file;
-  private static final int I_TYPE_UP = R.drawable.type_up;
+  private static final int I_TYPE_UP = R.drawable.type_up;*/
 
   private static final String CURRENT_PATH = "currentPath";
 
@@ -56,9 +56,9 @@ public class SelectActivity extends ListActivity {
   public static final String EX_STYLE = "selectStyle";
   public static final String EX_PATH_RESULT = "pathResult";
 
-  private List<Map<String, Object>> currentFileList = new ArrayList<Map<String, Object>>();
+  //private List<Map<String, Object>> currentFileList = new ArrayList<Map<String, Object>>();
   private String currentPath = "";
-  private SimpleAdapter simpleAdapter = null;
+  private ArrayAdapter<FileItem> simpleAdapter = null;
 
   private SelectMode selectMode = null;
 
@@ -78,13 +78,25 @@ public class SelectActivity extends ListActivity {
         currentPath = savedPath;
       }
     }
-    
+
     selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectConstants.SELECT_FILE), this);
     selectMode.updateUI();
 
     File f = new File(currentPath);
-    simpleAdapter = new SimpleAdapter(this, currentFileList, R.layout.select_file_item, new String[] { I_FILENAME,
-        I_FULL_PATH, I_TYPE }, new int[] { R.id.fileName, R.id.fullPath, R.id.fileType });
+//    simpleAdapter = new SimpleAdapter(this, currentFileList, R.layout.select_file_item, new String[] { I_FILENAME,
+//        I_FULL_PATH, I_TYPE }, new int[] { R.id.fileName, R.id.fullPath, R.id.fileType });
+
+    simpleAdapter = new ArrayAdapter<FileItem>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
+      @Override
+      public View getView(int position, View convertView, ViewGroup parent) {
+        View item = super.getView(position, convertView, parent);
+        TextView tv2 = (TextView) item.findViewById(android.R.id.text2);
+        FileItem fItem = this.getItem(position);
+        tv2.setText(fItem.getFullPath());
+
+        return item;
+      }
+    };
 
     updateCurrentList(f);
 
@@ -92,10 +104,12 @@ public class SelectActivity extends ListActivity {
   }
 
   void updateCurrentList(File f) {
-    List<Map<String, Object>> newData = getData(f);
+    List<FileItem> newData = getData(f);
     currentPath = f.getAbsolutePath();
-    currentFileList.clear();
-    currentFileList.addAll(newData);
+    simpleAdapter.clear();
+    for (FileItem item : newData) {
+      simpleAdapter.add(item);
+    }
     simpleAdapter.notifyDataSetChanged();
   }
 
@@ -116,7 +130,7 @@ public class SelectActivity extends ListActivity {
     Arrays.sort(files, sorter);
   }
 
-  private List<Map<String, Object>> getData(File folder) {
+  private List<FileItem> getData(File folder) {
     if (!folder.isDirectory()) {
       return Collections.emptyList();
     }
@@ -125,25 +139,20 @@ public class SelectActivity extends ListActivity {
     File[] listFiles = folder.listFiles(selectMode);
     sortData(listFiles);
 
-    List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+    List<FileItem> result = new ArrayList<FileItem>();
 
     // add "Up one level" item
     File parentFolder = folder.getParentFile();
     if (parentFolder != null) {
-      Map<String, Object> up = new HashMap<String, Object>();
-      up.put(I_FILENAME, "Up");
-      up.put(I_TYPE, I_TYPE_UP);
-      up.put(I_FULL_PATH, parentFolder.getAbsolutePath());
-
-      result.add(up);
+      result.add(new FileItem("Up", FileType.Up, parentFolder));
     }
 
     for (int i = 0; i < listFiles.length; i++) {
       File f = listFiles[i];
-      Map<String, Object> item = new HashMap<String, Object>();
-      item.put(I_FILENAME, f.getName());
-      item.put(I_TYPE, f.isDirectory() ? I_TYPE_FOLDER : I_TYPE_FILE);
-      item.put(I_FULL_PATH, f.getAbsolutePath());
+      FileItem item = new FileItem(
+        f.getName(),
+        f.isDirectory() ? FileType.Folder : FileType.File,
+        f);
 
       result.add(item);
     }
@@ -152,11 +161,9 @@ public class SelectActivity extends ListActivity {
 
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    Map<String, Object> item = (Map<String, Object>) simpleAdapter.getItem(position);
+    FileItem item = simpleAdapter.getItem(position);
 
-    String path = (String) item.get(I_FULL_PATH);
-    File f = new File(path);
-    selectMode.onItemClicked(f);
+    selectMode.onItemClicked(item.getFile());
 
     super.onListItemClick(l, v, position, id);
   }
@@ -181,10 +188,47 @@ public class SelectActivity extends ListActivity {
   public String getCurrentPath() {
     return currentPath;
   }
-  
+
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putString(CURRENT_PATH, currentPath);
+  }
+
+  private static class FileItem {
+    private final String name;
+    private final FileType type;
+    private final File file;
+
+    public FileItem(String name, FileType type, File file) {
+      this.name = name;
+      this.type = type;
+      this.file = file;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public FileType getType() {
+      return type;
+    }
+
+    public File getFile() {
+      return file;
+    }
+
+    public String getFullPath() {
+      return file.getAbsolutePath();
+    }
+
+    @Override
+    public String toString() {
+      return getName();
+    }
+  }
+
+  private enum FileType {
+    File, Folder, Up
   }
 }
