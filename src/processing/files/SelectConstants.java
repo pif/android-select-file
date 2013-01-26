@@ -1,7 +1,6 @@
 package processing.files;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -71,7 +70,7 @@ public final class SelectConstants {
         Button scf = new Button(context);
         scf.setId(RID_FOLDER_BTN);
         scf.setLayoutParams(new LayoutParams(
-            LayoutParams.FILL_PARENT, 
+            LayoutParams.MATCH_PARENT, 
             LayoutParams.WRAP_CONTENT));
         scf.setText(SelectConstants.fs_select_current_folder);
         scf.setVisibility(View.GONE);
@@ -79,7 +78,7 @@ public final class SelectConstants {
         LinearLayout llsave = new LinearLayout(context);
         llsave.setId(RID_SAVE_CTLS_LL);
         RelativeLayout.LayoutParams rllsavep = new RelativeLayout.LayoutParams(
-            LayoutParams.FILL_PARENT, 
+            LayoutParams.MATCH_PARENT, 
             LayoutParams.WRAP_CONTENT);
         llsave.setLayoutParams(rllsavep);
         llsave.setVisibility(View.GONE);
@@ -109,8 +108,8 @@ public final class SelectConstants {
     ListView lv = new ListView(context);
     lv.setId(RID_ITEMS_LV);
     RelativeLayout.LayoutParams rlvl = new RelativeLayout.LayoutParams(
-        LayoutParams.FILL_PARENT, 
-        LayoutParams.FILL_PARENT);
+        LayoutParams.MATCH_PARENT, 
+        LayoutParams.MATCH_PARENT);
     rlvl.addRule(RelativeLayout.ABOVE, RID_CONTROLS_LL);
     lv.setLayoutParams(rlvl);
     
