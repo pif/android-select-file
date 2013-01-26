@@ -71,7 +71,7 @@ public class SelectActivity extends ListActivity {
       }
     }
 
-    selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectConstants.SELECT_FILE), this);
+    selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectMode.SELECT_FILE), this);
     selectMode.updateUI();
 
     File f = new File(currentPath);
