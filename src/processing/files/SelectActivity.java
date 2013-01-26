@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
@@ -89,12 +90,15 @@ public class SelectActivity extends ListActivity {
     simpleAdapter = new ArrayAdapter<FileItem>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
       @Override
       public View getView(int position, View convertView, ViewGroup parent) {
-        View item = super.getView(position, convertView, parent);
-        TextView tv2 = (TextView) item.findViewById(android.R.id.text2);
+        View view = super.getView(position, convertView, parent);
+        
         FileItem fItem = this.getItem(position);
+
+        view.setBackgroundColor(fItem.getType().getColor());
+        TextView tv2 = (TextView) view.findViewById(android.R.id.text2);
         tv2.setText(fItem.getFullPath());
 
-        return item;
+        return view;
       }
     };
 
@@ -229,6 +233,19 @@ public class SelectActivity extends ListActivity {
   }
 
   private enum FileType {
-    File, Folder, Up
+    File(SelectConstants.COLOR_FILE), 
+    Folder(SelectConstants.COLOR_FOLDER),
+    Up(SelectConstants.COLOR_UP);
+    
+    private final int color;
+
+    FileType(int color) {
+      this.color = color;
+    }
+    
+    public int getColor() {
+      return color;
+    }
+    
   }
 }
