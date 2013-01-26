@@ -11,9 +11,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 public final class SelectConstants {
-  public static final int SELECT_FILE = 1;
-  public static final int SELECT_FOLDER = 2;
-  public static final int SAVE_FILE = 4;
 
   /**
    * values copied from strings.xml

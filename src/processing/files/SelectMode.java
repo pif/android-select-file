@@ -12,6 +12,11 @@ import android.widget.EditText;
 
 public abstract class SelectMode implements FileFilter {
 
+  public static final int SELECT_FILE = 1;
+  public static final int SELECT_FOLDER = 2;
+  public static final int SAVE_FILE = 4;
+  
+  
   /**
    * Initialises custom UI elements for the selector.
    */
@@ -42,11 +47,11 @@ public abstract class SelectMode implements FileFilter {
    */
   static SelectMode createSelectMode(int type, SelectActivity activity) {
     switch (type) {
-    case SelectConstants.SELECT_FILE:
+    case SELECT_FILE:
       return new OPEN_FILE(activity);
-    case SelectConstants.SELECT_FOLDER:
+    case SELECT_FOLDER:
       return new OPEN_FOLDER(activity);
-    case SelectConstants.SAVE_FILE:
+    case SAVE_FILE:
       return new SAVE_FILE(activity);
     default:
       throw new IllegalArgumentException("Only OPEN_FILE, OPEN_FOLDER, SAVE_FILE allowed");
