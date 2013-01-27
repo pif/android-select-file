@@ -48,6 +48,8 @@ public class SelectActivity extends ListActivity {
   public static final String EX_PATH = "extraPath";
   public static final String EX_STYLE = "selectStyle";
   public static final String EX_PATH_RESULT = "pathResult";
+  public static final String EX_CALLBACK = "selectCallback";
+
 
   private String currentPath = "";
   private ArrayAdapter<FileItem> simpleAdapter = null;

@@ -86,6 +86,8 @@ public abstract class SelectMode implements FileFilter {
 
   void sendResult(File f) {
     Intent result = new Intent();
+    result.putExtra(SelectActivity.EX_CALLBACK, activity.getIntent().getExtras().getString(SelectActivity.EX_CALLBACK));
+
     result.putExtra(SelectActivity.EX_PATH_RESULT, f.getAbsolutePath());
     activity.setResult(SelectActivity.RESULT_OK, result);
     //Toast.makeText(activity, "Selected: " + f.getAbsolutePath(), Toast.LENGTH_LONG).show();
