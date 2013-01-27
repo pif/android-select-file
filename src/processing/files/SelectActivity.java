@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
@@ -86,8 +87,13 @@ public class SelectActivity extends ListActivity {
         FileItem fItem = this.getItem(position);
 
         view.setBackgroundColor(fItem.getType().getColor());
+        TextView tv1 = (TextView) view.findViewById(android.R.id.text1);
         TextView tv2 = (TextView) view.findViewById(android.R.id.text2);
         tv2.setText(fItem.getFullPath());
+        
+        tv1.setTextColor(Color.BLACK);
+        tv2.setTextColor(Color.BLACK);
+        
 
         return view;
       }
