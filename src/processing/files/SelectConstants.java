@@ -9,6 +9,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+/**
+ * Removed all resource files. Moved all valuable onstants into this file.
+ * This was done due to the way processing handles android builds.
+ * 
+ * @author ostap.andrusiv
+ *
+ */
 public final class SelectConstants {
 
   /**

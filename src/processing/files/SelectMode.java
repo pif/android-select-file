@@ -10,6 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Data model, which encapsulates all selection logic.
+ * Specifies, which files should be shown, defines, which actions 
+ * should be taken due to specific UI clicks.
+ * 
+ * @author ostap.andrusiv
+ *
+ */
 public abstract class SelectMode implements FileFilter {
 
   public static final int SELECT_FILE = 1;
@@ -18,7 +26,7 @@ public abstract class SelectMode implements FileFilter {
   
   
   /**
-   * Initialises custom UI elements for the selector.
+   * Initializes custom UI elements for the selector.
    */
   abstract void updateUI();
 
@@ -27,7 +35,7 @@ public abstract class SelectMode implements FileFilter {
    * @param pathname file to check.
    * @return ACCEPTABLE, if file is ok.
    * DONT_NOTIFY if no action should be performed,
-   * or any other R.string.fs_* resource id, in case of problems.
+   * or any other SelectConstants.fs_* resource, in case of problems.
    */
   abstract String isOk(File pathname);
 
