@@ -7,7 +7,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.app.ListActivity;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
@@ -42,7 +45,7 @@ import android.widget.TextView;
  * @author ostap.andrusiv
  *
  */
-public class SelectActivity extends ListActivity {
+public class SelectActivity extends Dialog {
 
   private static final String CURRENT_PATH = "currentPath";
 
@@ -50,19 +53,27 @@ public class SelectActivity extends ListActivity {
   public static final String EX_STYLE = "selectStyle";
   public static final String EX_PATH_RESULT = "pathResult";
   public static final String EX_CALLBACK = "selectCallback";
+  public static final String EX_TITLE = "selectTitle";
 
 
   private String currentPath = "";
   private ArrayAdapter<FileItem> simpleAdapter = null;
 
   private SelectMode selectMode = null;
+  private final Intent intent;
 
+  public SelectActivity(Context context, Intent intent) {
+    super(context);
+    this.intent = intent;
+  }
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(SelectConstants.generateMainActivityViews(this));
-    setResult(RESULT_CANCELED);
+    setContentView(SelectConstants.generateMainActivityViews(getContext()));
+    setResult(Activity.RESULT_CANCELED);
 
+    setTitle(getIntent().getStringExtra(EX_TITLE));
     currentPath = getIntent().getStringExtra(EX_PATH);
     if (currentPath == null) {
       currentPath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -79,7 +90,7 @@ public class SelectActivity extends ListActivity {
 
     File f = new File(currentPath);
 
-    simpleAdapter = new ArrayAdapter<FileItem>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
+    simpleAdapter = new ArrayAdapter<FileItem>(getContext(), android.R.layout.simple_list_item_2, android.R.id.text1) {
       @Override
       public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
@@ -130,6 +141,7 @@ public class SelectActivity extends ListActivity {
       return lhs.getName().compareToIgnoreCase(rhs.getName());
     }
   };
+
 
   private void sortData(File[] files) {
     Arrays.sort(files, sorter);
@@ -195,9 +207,14 @@ public class SelectActivity extends ListActivity {
   }
 
   @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
+  public Bundle onSaveInstanceState() {
+    Bundle outState = super.onSaveInstanceState();
     outState.putString(CURRENT_PATH, currentPath);
+    return outState;
+  }
+  
+  public Intent getIntent() {
+    return intent;
   }
 
   private static class FileItem {
