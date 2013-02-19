@@ -45,7 +45,7 @@ public abstract class SelectMode implements FileFilter {
    */
   abstract void onItemClickedImpl(File pathname);
 
-  SelectActivity activity;
+  SelectDialog activity;
 
   /**
    * Create an instance of {@link SelectMode} for the specific activity.
@@ -53,7 +53,7 @@ public abstract class SelectMode implements FileFilter {
    * @param activity
    * @return selectMode
    */
-  static SelectMode createSelectMode(int type, SelectActivity activity) {
+  static SelectMode createSelectMode(int type, SelectDialog activity) {
     switch (type) {
     case SELECT_FILE:
       return new OPEN_FILE(activity);
@@ -94,9 +94,9 @@ public abstract class SelectMode implements FileFilter {
 
   void sendResult(File f) {
     Intent result = new Intent();
-    result.putExtra(SelectActivity.EX_CALLBACK, activity.getIntent().getExtras().getString(SelectActivity.EX_CALLBACK));
+    result.putExtra(SelectDialog.EX_CALLBACK, activity.getIntent().getExtras().getString(SelectDialog.EX_CALLBACK));
 
-    result.putExtra(SelectActivity.EX_PATH_RESULT, f.getAbsolutePath());
+    result.putExtra(SelectDialog.EX_PATH_RESULT, f.getAbsolutePath());
 //    activity.setResult(Activity.RESULT_OK, result);
     //Toast.makeText(activity, "Selected: " + f.getAbsolutePath(), Toast.LENGTH_LONG).show();
     activity.onFileSelected(f, result);
@@ -115,7 +115,7 @@ public abstract class SelectMode implements FileFilter {
   }
 
   private static class OPEN_FILE extends SelectMode {
-    public OPEN_FILE(SelectActivity activity) {
+    public OPEN_FILE(SelectDialog activity) {
       this.activity = activity;
     }
 
@@ -145,7 +145,7 @@ public abstract class SelectMode implements FileFilter {
   }
 
   private static class OPEN_FOLDER extends SelectMode {
-    public OPEN_FOLDER(SelectActivity activity) {
+    public OPEN_FOLDER(SelectDialog activity) {
       this.activity = activity;
     }
 
@@ -183,7 +183,7 @@ public abstract class SelectMode implements FileFilter {
   }
 
   private static class SAVE_FILE extends SelectMode {
-    public SAVE_FILE(SelectActivity activity) {
+    public SAVE_FILE(SelectDialog activity) {
       this.activity = activity;
     }
 

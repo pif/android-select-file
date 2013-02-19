@@ -4,17 +4,14 @@ import java.io.File;
 
 import processing.core.PApplet;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 
 public class FileLibrary {
-  private Object parent;
-  private Context Cparent;
+  private PApplet parent;
   
-  public FileLibrary(Context c, Object parent) {
+  public FileLibrary(PApplet parent) {
     this.parent = parent;
-    this.Cparent = c;
   }
 
   /**
@@ -89,13 +86,13 @@ public class FileLibrary {
     }
 
     Intent i = new Intent();
-    i.putExtra(SelectActivity.EX_PATH, defaultSelection.getAbsolutePath());
-    i.putExtra(SelectActivity.EX_STYLE, mode);
-    i.putExtra(SelectActivity.EX_CALLBACK, callbackMethod);
-    i.putExtra(SelectActivity.EX_TITLE, prompt);
+    i.putExtra(SelectDialog.EX_PATH, defaultSelection.getAbsolutePath());
+    i.putExtra(SelectDialog.EX_STYLE, mode);
+    i.putExtra(SelectDialog.EX_CALLBACK, callbackMethod);
+    i.putExtra(SelectDialog.EX_TITLE, prompt);
     
     // TODO Amend THIS
-    Dialog dlg = new SelectActivity(Cparent, parent, i);
+    Dialog dlg = new SelectDialog(parent, i);
     dlg.show();//startActivityForResult(i, RESULT_SELECT);
   }
 }
