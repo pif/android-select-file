@@ -1,4 +1,30 @@
-package processing.files;
+/**
+ * ##library.name##
+ * ##library.sentence##
+ * ##library.url##
+ *
+ * Copyright ##copyright## ##author##
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General
+ * Public License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA  02111-1307  USA
+ * 
+ * @author      ##author##
+ * @modified    ##date##
+ * @version     ##library.prettyVersion## (##library.version##)
+ */
+package select.files;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -45,7 +71,7 @@ public abstract class SelectMode implements FileFilter {
    */
   abstract void onItemClickedImpl(File pathname);
 
-  SelectDialog activity;
+  SelectDialog ui;
 
   /**
    * Create an instance of {@link SelectMode} for the specific activity.
@@ -94,17 +120,17 @@ public abstract class SelectMode implements FileFilter {
 
   void sendResult(File f) {
     Intent result = new Intent();
-    result.putExtra(SelectDialog.EX_CALLBACK, activity.getIntent().getExtras().getString(SelectDialog.EX_CALLBACK));
+    result.putExtra(SelectDialog.EX_CALLBACK, ui.getIntent().getExtras().getString(SelectDialog.EX_CALLBACK));
 
     result.putExtra(SelectDialog.EX_PATH_RESULT, f.getAbsolutePath());
 //    activity.setResult(Activity.RESULT_OK, result);
     //Toast.makeText(activity, "Selected: " + f.getAbsolutePath(), Toast.LENGTH_LONG).show();
-    activity.onFileSelected(f, result);
-    activity.dismiss();
+    ui.onFileSelected(f, result);
+    ui.dismiss();
   }
 
   void sayToUser(String title, String message, Object... params) {
-    AlertDialog dialog = new AlertDialog.Builder(activity.getContext())
+    AlertDialog dialog = new AlertDialog.Builder(ui.getContext())
       .setTitle(title)
       .setMessage(String.format(message, params))
       .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -116,7 +142,7 @@ public abstract class SelectMode implements FileFilter {
 
   private static class OPEN_FILE extends SelectMode {
     public OPEN_FILE(SelectDialog activity) {
-      this.activity = activity;
+      this.ui = activity;
     }
 
     @Override
@@ -133,7 +159,7 @@ public abstract class SelectMode implements FileFilter {
     @Override
     void onItemClickedImpl(File f) {
       if (f.isDirectory()) {
-        activity.updateCurrentList(f);
+        ui.updateCurrentList(f);
       } else {
         selectResult(f);
       }
@@ -146,7 +172,7 @@ public abstract class SelectMode implements FileFilter {
 
   private static class OPEN_FOLDER extends SelectMode {
     public OPEN_FOLDER(SelectDialog activity) {
-      this.activity = activity;
+      this.ui = activity;
     }
 
     @Override
@@ -162,29 +188,29 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     void onItemClickedImpl(File f) {
-      activity.updateCurrentList(f);
+      ui.updateCurrentList(f);
       // result is selected with the help of "Select Current Folder" button
     }
 
     @Override
     void updateUI() {
-      Button selectFolder = (Button) activity.findViewById(SelectConstants.RID_FOLDER_BTN);
+      Button selectFolder = (Button) ui.findViewById(SelectConstants.RID_FOLDER_BTN);
       selectFolder.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
-          OPEN_FOLDER.this.selectResult(new File(activity.getCurrentPath()));
+          OPEN_FOLDER.this.selectResult(new File(ui.getCurrentPath()));
         }
       });
 
-      View controls = activity.findViewById(SelectConstants.RID_CONTROLS_LL);
+      View controls = ui.findViewById(SelectConstants.RID_CONTROLS_LL);
       controls.setVisibility(View.VISIBLE);
-      View additionalControls = activity.findViewById(SelectConstants.RID_FOLDER_BTN);
+      View additionalControls = ui.findViewById(SelectConstants.RID_FOLDER_BTN);
       additionalControls.setVisibility(View.VISIBLE);
     }
   }
 
   private static class SAVE_FILE extends SelectMode {
     public SAVE_FILE(SelectDialog activity) {
-      this.activity = activity;
+      this.ui = activity;
     }
 
     @Override
@@ -213,7 +239,7 @@ public abstract class SelectMode implements FileFilter {
             }
           }
         };
-        AlertDialog dialog = new AlertDialog.Builder(activity.getContext()).setTitle(SelectConstants.fs_warning)
+        AlertDialog dialog = new AlertDialog.Builder(ui.getContext()).setTitle(SelectConstants.fs_warning)
             .setMessage(String.format(SelectConstants.fs_save_file_overwrite, file.getName()))
             .setPositiveButton(android.R.string.yes, yesNoListener)
             .setNegativeButton(android.R.string.no, yesNoListener).create();
@@ -225,9 +251,9 @@ public abstract class SelectMode implements FileFilter {
     @Override
     void onItemClickedImpl(File f) {
       if (f.isDirectory()) {
-        activity.updateCurrentList(f);
+        ui.updateCurrentList(f);
       } else {
-        EditText editText = (EditText) activity.findViewById(SelectConstants.RID_NAME_ET);
+        EditText editText = (EditText) ui.findViewById(SelectConstants.RID_NAME_ET);
         editText.setText(f.getName());
       }
       // result is returned with the help of "Save file" button
@@ -235,19 +261,19 @@ public abstract class SelectMode implements FileFilter {
 
     @Override
     void updateUI() {
-      final EditText fileName = (EditText) activity.findViewById(SelectConstants.RID_NAME_ET);
-      Button createFile = (Button) activity.findViewById(SelectConstants.RID_SAVE_BTN);
+      final EditText fileName = (EditText) ui.findViewById(SelectConstants.RID_NAME_ET);
+      Button createFile = (Button) ui.findViewById(SelectConstants.RID_SAVE_BTN);
       createFile.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
-          File path = new File(activity.getCurrentPath());
+          File path = new File(ui.getCurrentPath());
           File newFile = new File(path, fileName.getText().toString());
           SAVE_FILE.this.selectResult(newFile);
         }
       });
 
-      View controls = activity.findViewById(SelectConstants.RID_CONTROLS_LL);
+      View controls = ui.findViewById(SelectConstants.RID_CONTROLS_LL);
       controls.setVisibility(View.VISIBLE);
-      View additionalControls = activity.findViewById(SelectConstants.RID_SAVE_CTLS_LL);
+      View additionalControls = ui.findViewById(SelectConstants.RID_SAVE_CTLS_LL);
       additionalControls.setVisibility(View.VISIBLE);
     }
   }

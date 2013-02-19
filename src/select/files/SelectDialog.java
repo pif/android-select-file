@@ -1,4 +1,30 @@
-package processing.files;
+/**
+ * ##library.name##
+ * ##library.sentence##
+ * ##library.url##
+ *
+ * Copyright ##copyright## ##author##
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General
+ * Public License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA  02111-1307  USA
+ * 
+ * @author      ##author##
+ * @modified    ##date##
+ * @version     ##library.prettyVersion## (##library.version##)
+ */
+package select.files;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +41,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -54,11 +79,13 @@ public class SelectDialog extends Dialog {
 
   private SelectMode selectMode = null;
   private final Intent intent;
+  private PApplet parent;
 
   private ListView listView = null;
-
+  
   public SelectDialog(PApplet context, Intent intent) {
     super(context);
+    this.parent = context;
     this.intent = intent;
   }
   
@@ -195,14 +222,16 @@ public class SelectDialog extends Dialog {
   protected void onFileSelected(File file, Intent intent) {
     if (file != null) {
       String callbackMethod = intent.getStringExtra(SelectDialog.EX_CALLBACK);
-      selectCallback(file, callbackMethod, getContext());
+      selectCallback(file, callbackMethod, parent);
     }
   }
 
   static private void selectCallback(File selectedFile, String callbackMethod, Object callbackObject) {
     try {
       Class<?> callbackClass = callbackObject.getClass();
+//      System.err.println(callbackClass + " clazz");
       Method selectMethod = callbackClass.getMethod(callbackMethod, new Class[] { File.class });
+//      System.err.println(selectMethod + " method");
       selectMethod.invoke(callbackObject, new Object[] { selectedFile });
 
     } catch (IllegalAccessException iae) {
@@ -216,22 +245,22 @@ public class SelectDialog extends Dialog {
     }
   }
 
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      File parentFile = new File(currentPath).getParentFile();
-      if (parentFile == null) {
-        // finita la comedia: returning to the calling activity
-        return super.onKeyDown(keyCode, event);
-      } else {
-        updateCurrentList(parentFile);
-      }
-      return true;
-
-    } else {
-      return super.onKeyDown(keyCode, event);
-    }
-  }
+//  @Override
+//  public boolean onKeyDown(int keyCode, KeyEvent event) {
+//    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+//      File parentFile = new File(currentPath).getParentFile();
+//      if (parentFile == null) {
+//        // finita la comedia: returning to the calling activity
+//        return super.onKeyDown(keyCode, event);
+//      } else {
+//        updateCurrentList(parentFile);
+//      }
+//      return true;
+//
+//    } else {
+//      return super.onKeyDown(keyCode, event);
+//    }
+//  }
 
   public String getCurrentPath() {
     return currentPath;
