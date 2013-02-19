@@ -1,77 +1,137 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Select File Activity for Android by pif</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-  </head>
-  <body>
-
-      <header>
-        <h1>Select File Activity for Android</h1>
-        <p>android-select-file</p>
-      </header>
-
-      <div id="banner">
-        <span id="logo"></span>
-
-        <a href="https://github.com/pif/android-select-file" class="button fork"><strong>View On GitHub</strong></a>
-        <div class="downloads">
-          <span>Downloads:</span>
-          <ul>
-            <li><a href="https://github.com/pif/android-select-file/zipball/master" class="button">ZIP</a></li>
-            <li><a href="https://github.com/pif/android-select-file/tarball/master" class="button">TAR</a></li>
-          </ul>
-        </div>
-      </div><!-- end banner -->
-
-    <div class="wrapper">
-      <nav>
-        <ul></ul>
-      </nav>
-      <section>
-        <h3>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p>Project maintained by <a href="https://github.com/pif">pif</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
-      </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
-  </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>SelectFile</title>
+<meta name="description" content="A library for the Processing programming environment" />
+<meta name="keywords" content="processing.org, library, android,selectInput,selectOutput,selectFolder,file,open,save" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="en-us" />
+<meta name="ROBOTS" content="index,follow,archive" />
+<meta http-equiv="imagetoolbar" content="false" />
+<meta name="MSSmartTagsPreventParsing" content="true" />
+<meta name="author" content="Ostap Andrusiv" />
+<meta name="Rating" content="General" />
+<meta name="revisit-after" content="7 Days" />
+<meta name="doc-class" content="Living Document" />
+<link rel="stylesheet" type="text/css" href="./stylesheet.css">
+</head>
+<body>
+	<div id="container">
+	
+		<div id="header">
+			<h1>SelectFile</h1>
+		</div>
+		
+		<div id="menu" class="clear">
+			<ul>
+				<li><a href="#about">About</a> \ </li>
+				<li><a href="#download">Download</a> \ </li>
+				<li><a href="#download">Installation</a> \ </li>
+				<li><a href="#examples">Examples</a> \ </li>
+				<li><a href="./reference/index.html" target="_blank">Reference</a></li>
+				<!-- <li><a href="#demos">Demos</a> \ </li> -->				
+				<!-- <li><a href="#misc">Misc</a> \ </li> -->
+				<!-- <li><a href="#images">Images</a> \ </li> -->
+			</ul>
+		</div>
+		
+		<div id="content" class="clear">
+			
+			<div id="about">
+			<h2>SelectFile</h2>
+			<p>
+			A library by <a href="http://andrusiv.com">Ostap Andrusiv</a> for the <a href="http://www.processing.org" target="_blank">Processing</a> programming environment.<br>
+			Last update, 02/20/2013.
+			</p>
+			<p>
+			Android library which provides Dialogs for selectInput(), selectFolder() and selectOutput() methods.<br>
+			Android misses open&save file dialogs. SelectFile library adds these dialogs to the Processing for Android. It is specifically designed for Android mode in Processing 2.0. All interaction with the library is done through FileLibrary class. <br>
+			Feel free to replace this paragraph with a description of the library.<br>
+			Contributed libraries are developed, documented, and maintained by members of the Processing community. Further directions are included with each library. For feedback and support, please post to the Discourse. We strongly encourage all libraries to be open source, but not all of them are.
+			</p>
+			</div>
+			
+			
+			
+			<div id="download" class="clear">
+			<h2>Download</h2>
+			<p>
+			Download SelectFile version 0.0.1 (1) in 
+			<a href="./download/SelectFile-1.zip">.zip format</a>.
+			</p>
+			<h2>Installation</h2>
+			<p>
+			Unzip and put the extracted SelectFile folder into the libraries folder of your Processing sketches. Reference and examples are included in the SelectFile folder.
+			</p>
+			</div>	
+			
+			
+			<div id="resources">
+			<p><strong>Keywords</strong>. android,selectInput,selectOutput,selectFolder,file,open,save</p>
+			<p><strong>Reference</strong>. Have a look at the javadoc reference <a href="./reference/index.html" target="_blank">here</a>. A copy of the reference is included in the .zip as well.</p>		
+			<p><strong>Source</strong>. The source code of SelectFile is available at <a href="https://github.com/pif/android-select-file">Github</a>, and its repository can be browsed <a href="https://github.com/pif/android-select-file/tree/dlg" target="_blank">here</a>.</p>			
+			</div>
+			
+			
+			<div id="examples" class="clear">
+			<h2>Examples</h2>
+			<p>Find a list of examples in the current distribution of SelectFile, or have a look at them by following the links below.</p>
+			<ul>
+			<li><a href="examples/Select/Select.pde">Select</a></li> 
+			</ul>
+			</div>
+			
+			
+			<div id="info">
+			<h2>Tested</h2>
+			<p>
+			<!-- on which platform has the library been tested? -->
+			<strong>Platform</strong> osx,windows,linux,android
+			
+			<!-- which processing version did you use for testing your library? -->
+			<br /><strong>Processing</strong> 2.0
+			
+			<!-- does your library depend on any other library or framework? -->
+			<br /><strong>Dependencies</strong> ?
+			</p>
+			</div>
+		
+			
+			<!-- use the demos section for a list of applets run in a browser. -->
+			<!--
+			<div id="demos" class="clear">
+				<h2>demos</h2>
+				<p>
+				find a list of online applet demos below.
+				
+				<ul>
+					<li><a href="./applets/demo/index.html">demo</a></li>
+				</ul>
+				</p>
+			</div>
+			-->
+			
+			<!-- use the misc section for other relevant information. Activate the link to the misc section in the menu above. -->
+			<!--
+			<div id="misc" class="clear">
+				<p></p>
+			</div>
+			-->
+			
+			<!-- use the images/screenshots section. Activate the link to the misc section in the menu above. -->
+			<!--
+			<div id="images" class="clear">
+			</div>
+			-->
+			
+			
+			<br class="clear" />
+		</div>
+		
+		<div id="footer">
+			<p>by Ostap Andrusiv, (C) 2013.</p>
+		</div>
+	</div>
+</body>
 </html>
