@@ -97,13 +97,14 @@ public abstract class SelectMode implements FileFilter {
     result.putExtra(SelectActivity.EX_CALLBACK, activity.getIntent().getExtras().getString(SelectActivity.EX_CALLBACK));
 
     result.putExtra(SelectActivity.EX_PATH_RESULT, f.getAbsolutePath());
-    activity.setResult(SelectActivity.RESULT_OK, result);
+//    activity.setResult(Activity.RESULT_OK, result);
     //Toast.makeText(activity, "Selected: " + f.getAbsolutePath(), Toast.LENGTH_LONG).show();
-    activity.finish();
+    activity.onFileSelected(f, result);
+    activity.dismiss();
   }
 
   void sayToUser(String title, String message, Object... params) {
-    AlertDialog dialog = new AlertDialog.Builder(activity)
+    AlertDialog dialog = new AlertDialog.Builder(activity.getContext())
       .setTitle(title)
       .setMessage(String.format(message, params))
       .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -212,7 +213,7 @@ public abstract class SelectMode implements FileFilter {
             }
           }
         };
-        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle(SelectConstants.fs_warning)
+        AlertDialog dialog = new AlertDialog.Builder(activity.getContext()).setTitle(SelectConstants.fs_warning)
             .setMessage(String.format(SelectConstants.fs_save_file_overwrite, file.getName()))
             .setPositiveButton(android.R.string.yes, yesNoListener)
             .setNegativeButton(android.R.string.no, yesNoListener).create();

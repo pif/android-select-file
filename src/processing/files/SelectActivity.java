@@ -1,13 +1,15 @@
 package processing.files;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.app.Activity;
+import processing.core.PApplet;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -62,8 +65,13 @@ public class SelectActivity extends Dialog {
   private SelectMode selectMode = null;
   private final Intent intent;
 
-  public SelectActivity(Context context, Intent intent) {
-    super(context);
+  private ListView listView = null;
+
+  private Object parent;
+  
+  public SelectActivity(Context context1, Object context, Intent intent) {
+    super(context1);
+    this.parent = context;
     this.intent = intent;
   }
   
@@ -71,7 +79,14 @@ public class SelectActivity extends Dialog {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(SelectConstants.generateMainActivityViews(getContext()));
-    setResult(Activity.RESULT_CANCELED);
+    listView = (ListView) findViewById(android.R.id.list);
+    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView parent, View v, int position, long id) {
+        onListItemClick((ListView) parent, v, position, id);
+      }
+      
+    });
 
     setTitle(getIntent().getStringExtra(EX_TITLE));
     currentPath = getIntent().getStringExtra(EX_PATH);
@@ -113,6 +128,10 @@ public class SelectActivity extends Dialog {
     updateCurrentList(f);
 
     setListAdapter(simpleAdapter);
+  }
+
+  private void setListAdapter(ArrayAdapter<FileItem> simpleAdapter) {
+    listView.setAdapter(simpleAdapter);
   }
 
   void updateCurrentList(File f) {
@@ -176,13 +195,38 @@ public class SelectActivity extends Dialog {
     return result;
   }
 
-  @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
     FileItem item = simpleAdapter.getItem(position);
 
     selectMode.onItemClicked(item.getFile());
+  }
 
-    super.onListItemClick(l, v, position, id);
+  /**
+   * TODO: Probably, should be moved inside the {@link FileLibrary#selectImpl(String, String, File, int)} method.
+   * @param file
+   */
+  protected void onFileSelected(File file, Intent intent) {
+    if (file != null) {
+      String callbackMethod = intent.getStringExtra(SelectActivity.EX_CALLBACK);
+      selectCallback(file, callbackMethod, parent);
+    }
+  }
+
+  static private void selectCallback(File selectedFile, String callbackMethod, Object callbackObject) {
+    try {
+      Class<?> callbackClass = callbackObject.getClass();
+      Method selectMethod = callbackClass.getMethod(callbackMethod, new Class[] { File.class });
+      selectMethod.invoke(callbackObject, new Object[] { selectedFile });
+
+    } catch (IllegalAccessException iae) {
+      System.err.println(callbackMethod + "() must be public");
+
+    } catch (InvocationTargetException ite) {
+      ite.printStackTrace();
+
+    } catch (NoSuchMethodException nsme) {
+      System.err.println(callbackMethod + "() could not be found");
+    }
   }
 
   @Override

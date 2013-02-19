@@ -1,18 +1,20 @@
 package processing.files;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
+import processing.core.PApplet;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
-import processing.core.PApplet;
 
 public class FileLibrary {
-  private PApplet parent;
+  private Object parent;
+  private Context Cparent;
   
-  public FileLibrary(PApplet parent) {
+  public FileLibrary(Context c, Object parent) {
     this.parent = parent;
+    this.Cparent = c;
   }
 
   /**
@@ -86,48 +88,14 @@ public class FileLibrary {
       defaultSelection = Environment.getExternalStorageDirectory();
     }
 
-    Intent i = new Intent(PApplet.this, SelectActivity.class);
+    Intent i = new Intent();
     i.putExtra(SelectActivity.EX_PATH, defaultSelection.getAbsolutePath());
     i.putExtra(SelectActivity.EX_STYLE, mode);
     i.putExtra(SelectActivity.EX_CALLBACK, callbackMethod);
+    i.putExtra(SelectActivity.EX_TITLE, prompt);
     
     // TODO Amend THIS
-    startActivityForResult(i, RESULT_SELECT);
-    crap(ololo);
+    Dialog dlg = new SelectActivity(Cparent, parent, i);
+    dlg.show();//startActivityForResult(i, RESULT_SELECT);
   }
-
-  /**
-   * TODO: Probably, should be moved inside the {@link FileLibrary#selectImpl(String, String, File, int)} method.
-   * @param file
-   */
-  private void onFileSelected(File file) {
-    if (file != null) {
-      String callbackMethod = data.getStringExtra(SelectActivity.EX_CALLBACK);
-      selectCallback(file, callbackMethod, parent);
-    }
-  }
-  
-
-  static private void selectCallback(File selectedFile,
-                                     String callbackMethod,
-                                     Object callbackObject) {
-    try {
-      Class<?> callbackClass = callbackObject.getClass();
-      Method selectMethod =
-        callbackClass.getMethod(callbackMethod, new Class[] { File.class });
-      selectMethod.invoke(callbackObject, new Object[] { selectedFile });
-
-    } catch (IllegalAccessException iae) {
-      System.err.println(callbackMethod + "() must be public");
-
-    } catch (InvocationTargetException ite) {
-      ite.printStackTrace();
-
-    } catch (NoSuchMethodException nsme) {
-      System.err.println(callbackMethod + "() could not be found");
-    }
-  }
-  
-  
-  
 }
