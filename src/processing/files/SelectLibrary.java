@@ -7,10 +7,10 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Environment;
 
-public class FileLibrary {
+public class SelectLibrary {
   private PApplet parent;
   
-  public FileLibrary(PApplet parent) {
+  public SelectLibrary(PApplet parent) {
     this.parent = parent;
   }
 

@@ -189,7 +189,7 @@ public class SelectDialog extends Dialog {
   }
 
   /**
-   * TODO: Probably, should be moved inside the {@link FileLibrary#selectImpl(String, String, File, int)} method.
+   * TODO: Probably, should be moved inside the {@link SelectLibrary#selectImpl(String, String, File, int)} method.
    * @param file
    */
   protected void onFileSelected(File file, Intent intent) {
