@@ -72,12 +72,14 @@ public class SelectDialog extends Dialog {
   public static final String EX_PATH_RESULT = "pathResult";
   public static final String EX_CALLBACK = "selectCallback";
   public static final String EX_TITLE = "selectTitle";
+  public static final String EX_EXTENSION = "extension";
 
 
   private String currentPath = "";
   private ArrayAdapter<FileItem> simpleAdapter = null;
 
   private SelectMode selectMode = null;
+  private String extension = null;
   private final Intent intent;
   private PApplet parent;
 
@@ -117,6 +119,8 @@ public class SelectDialog extends Dialog {
     selectMode = SelectMode.createSelectMode(getIntent().getIntExtra(EX_STYLE, SelectMode.SELECT_FILE), this);
     selectMode.updateUI();
 
+    extension = getIntent().getStringExtra(EX_EXTENSION);
+
     File f = new File(currentPath);
 
     simpleAdapter = new ArrayAdapter<FileItem>(getContext(), android.R.layout.simple_list_item_2, android.R.id.text1) {
@@ -153,7 +157,21 @@ public class SelectDialog extends Dialog {
     currentPath = f.getAbsolutePath();
     simpleAdapter.clear();
     for (FileItem item : newData) {
-      simpleAdapter.add(item);
+      if (extension == null) { // no extension filtering
+        simpleAdapter.add(item);
+      } else {
+        if (item.getFile().isDirectory()) { // display folders
+          simpleAdapter.add(item);
+        } else {
+          String name = item.getName();
+          String[] ss = name.split("\\.");
+          String ext = ss[ss.length - 1];
+          if (ext.equals(extension)) { // display file matching extension given
+            simpleAdapter.add(item);
+          }
+
+        }
+      }
     }
     simpleAdapter.notifyDataSetChanged();
   }

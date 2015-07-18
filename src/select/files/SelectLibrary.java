@@ -68,7 +68,7 @@ public class SelectLibrary {
    * @param callback name of the method to be called when the selection is made
    */  
   public void selectInput(String prompt, String callback) {
-    selectImpl(prompt, callback, null, SelectMode.SELECT_FILE);
+    selectImpl(prompt, callback, null, null, SelectMode.SELECT_FILE);
   }
 
   /**
@@ -79,7 +79,7 @@ public class SelectLibrary {
    * @param callback name of the method to be called when the selection is made
    */
   public void selectOutput(String prompt, String callback) {
-    selectImpl(prompt, callback, null, SelectMode.SAVE_FILE);
+    selectImpl(prompt, callback, null, null, SelectMode.SAVE_FILE);
   }
   
   /**
@@ -90,8 +90,60 @@ public class SelectLibrary {
    * @param callback name of the method to be called when the selection is made
    */
   public void selectFolder(String prompt, String callback) {
-    selectImpl(prompt, callback, null, SelectMode.SELECT_FOLDER);
+    selectImpl(prompt, callback, null, null, SelectMode.SELECT_FOLDER);
   }
+
+  /**
+   * Select input with a specific path
+   * See selectInput() for details.
+   *
+   * @webref input:files
+   * @param prompt
+   *            message to the user
+   * @param callback
+   *            name of the method to be called when the selection is made
+   * @param path
+   *        a java File object with the specific path 
+   */
+  public void customInput(String prompt, String callback, File path) {
+    selectImpl(prompt, callback, path, null, SelectMode.SELECT_FILE);
+  }
+  
+  /**
+   * See customInput() for details.
+   *
+   * @webref output:files
+   * @param prompt
+   *            message to the user
+   * @param callback
+   *            name of the method to be called when the selection is made
+   * @param path
+   *        a java File object with the specific path 
+   */
+  public void customOutput(String prompt, String callback, File path) {
+    selectImpl(prompt, callback, path, null, SelectMode.SAVE_FILE);
+  }
+  
+  
+  /**
+   * Filtering result with an extension name
+   * See selectInput() for details.
+   *
+   * @webref input:files
+   * @param prompt
+   *            message to the user
+   * @param callback
+   *            name of the method to be called when the selection is made
+   * @param path
+   *        java File object with the specific path 
+   * @param extension
+   *        string for instance "mp3" or "csv".
+   */
+  public void filteredInput(String prompt, String callback, File path,
+      String extension) {
+    selectImpl(prompt, callback, path, extension, SelectMode.SELECT_FILE);
+  }
+
 
   /**
    * Starts open/save dialog.
@@ -104,6 +156,7 @@ public class SelectLibrary {
   protected void selectImpl(final String prompt,
                                    final String callbackMethod,
                                    File defaultSelection,
+                                   final String ext,
                                    final int mode) {
     if (defaultSelection == null) {
       defaultSelection = Environment.getExternalStorageDirectory();
@@ -113,6 +166,7 @@ public class SelectLibrary {
     i.putExtra(SelectDialog.EX_PATH, defaultSelection.getAbsolutePath());
     i.putExtra(SelectDialog.EX_STYLE, mode);
     i.putExtra(SelectDialog.EX_CALLBACK, callbackMethod);
+    i.putExtra(SelectDialog.EX_EXTENSION, ext);
     i.putExtra(SelectDialog.EX_TITLE, prompt);
     
     parent.runOnUiThread(new Runnable() {
