@@ -83,9 +83,9 @@ public class SelectDialog extends Dialog {
 
   private ListView listView = null;
   
-  public SelectDialog(PApplet context, Intent intent) {
-    super(context);
-    this.parent = context;
+  public SelectDialog(PApplet parent, Intent intent) {
+    super(parent.getContext());
+    this.parent = parent;
     this.intent = intent;
   }
   
