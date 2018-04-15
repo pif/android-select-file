@@ -1,7 +1,7 @@
 # SelectFile Library for Processing Android Mode
 
-Android has no default open&save file dialogs. 
-`SelectFile` [Processing](https://processing.org/) library provides UI dialogs for these methods in Android mode:
+Android has no default Open & Save file dialogs. 
+`SelectFile` library for [Processing](https://processing.org/) provides UI dialogs for these methods in Android mode:
 * `selectInput()` - select any file
 * `selectFolder()` - select any folder
 * `selectOutput()` - save file
@@ -12,14 +12,14 @@ Tested with Processing 3.0.
 
 ## Installation
 
-1. Go to `Sketches > Import Library > Add Library...`
+1. In Processing go to `Sketches > Import Library > Add Library...`
 2. Search for `SelectFile`
 3. Click install.
 
 ## Usage
 
-1. After you installed the library, check out an example `File > Examples > Contributed Libraries > SelectFile`.
-2. Don't forget to add correct READ/WRITE permissions to your sketch. Go to `Android > Sketch Permissions` and choose `READ_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE`.
+1. After you installed the library, check out an example here: `File > Examples > Contributed Libraries > SelectFile`.
+2. *Add correct READ/WRITE permissions to your sketch*. Go to `Android > Sketch Permissions` and choose `READ_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE`.
 
 ## Building From Source
 
@@ -33,9 +33,10 @@ Tested with Processing 3.0.
 The code responsible for selecting files does not depend on Processing and can be reused in other Android projects.
 Look into `SelectLibrary` class. 
 
-Here's a bit of source code, which shows, how one can use the library from Android:
+Here's an example, how one can use the library from Android:
 
-### MainActivity.java
+<details>
+ <summary>`MainActivity.java` source code.</summary>
 
 Activity with three buttons and a text field. When someone accomplishes 
 selected action (select file, folder or save file) text field changes 
@@ -99,8 +100,11 @@ public class MainActivity extends Activity {
   }
 }
 ```
+</details>
 
-### activity_main.xml
+<details>
+ <summary>`activity_main.xml` activity layout source.</summary>
+
 Layout for the activity:
 
 ```xml
@@ -137,7 +141,7 @@ Layout for the activity:
 
 </LinearLayout>
 ```
-
+</details>
 
 @author ostap.andrusiv
 
