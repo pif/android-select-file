@@ -70,20 +70,11 @@
                 <div id="examples" class="clear">
                     <h2>Examples</h2>
                     <p>Find a list of examples in the current distribution of ##library.name##, or have a look at them by following the links below.</p>
-                    <ul>
+                    <p><ul>
                         ##examples##
-                    </ul>
+                    </ul></p>
                 </div>
-            </div>
-            <div id="right">
-                <div id="resources">
-                    <p><img src="./android-select-file.gif" /></p>
-                    <p><strong>Keywords</strong>. ##library.keywords##</p>
-                    <p><strong>Reference</strong>. Have a look at the javadoc reference <a href="./reference/index.html" target="_blank">here</a>. A copy of the reference is included in the .zip as well.</p>
-                    <p><strong>Source</strong>. The source code of ##library.name## is available at <a href="##source.url##">##source.host##</a>, and its repository can be browsed <a href="##source.repository##" target="_blank">here</a>.</p>
-                    
-                </div>
-                <div id="info">
+                <div id="info" class="clear">
                     <h2>Tested</h2>
                     <p>
                         <!-- on which platform has the library been tested? -->
@@ -94,6 +85,20 @@
                         <br /><strong>Dependencies</strong> ##library.dependencies##
                     </p>
                 </div>
+                <div id="resources" class="clear">
+                    <p><strong>Keywords</strong>. ##library.keywords##</p>
+                    <p><strong>Reference</strong>. Have a look at the javadoc reference <a href="./reference/index.html" target="_blank">here</a>. A copy of the reference is included in the .zip as well.</p>
+                    <p><strong>Source</strong>. The source code of ##library.name## is available at <a href="##source.url##">##source.host##</a>, and its repository can be browsed <a href="##source.repository##" target="_blank">here</a>.</p>
+                </div>
+            </div>
+            <div id="right">
+                <div id="images">
+                    <p><img src="./android-select-file.gif" /></p>
+                    <p><code>.selectFile()</code> in action</p>
+                    <p><img src="./android-select-file-all-features.gif" /></p>
+                    <p>All <code>SelectFile</code> features</p>
+                </div>
+                
             </div>
             <br class="clear" />
         </div>

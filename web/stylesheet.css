@@ -47,9 +47,13 @@ body {
 }
 
 
-#resources, #info {
+#resources, #info, #images {
 	width:320px;
 	float:left;
+}
+
+#images p {
+	margin-bottom: 16px;
 }
 
 #left {
