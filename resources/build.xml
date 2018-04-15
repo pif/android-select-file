@@ -9,6 +9,10 @@
 		If you have recommendations for improvements, please let Elie know 
 		at prisonerjohn@gmail.com
 -->
+
+<!--
+		2012-07-08	Joshua Albers	Updated to work for Android libraries for Google Summer of Code 2012
+-->
     
 	
 
@@ -67,6 +71,7 @@
 		<fileset dir="${classpath.local.location}" includes="${classpath.local.include}" />
 		<fileset dir="${classpath.libraries.location}" includes="**/*.jar" />
 		<fileset dir="${project.lib}" includes="**/*.jar" />
+		<fileset dir="${android_platform.location}" includes="${android_platform.include}" />
 	</path>		
 
 	
@@ -211,7 +216,7 @@ ${line}
 	<target name="generate.javadoc" if="is.normal">
 	  	<!-- create the java reference of the library -->
 		<javadoc bottom="Processing library ${project.name} by ${author.name}. ${library.copyright}" 
-				classpath="${classpath.local.location}/core.jar;{project.bin}" 
+				classpath="${classpath.local.location}/${classpath.local.include};${android_platform.location}/${android_platform.include};${project.bin}" 
 				destdir="${project.tmp}/${project.name}/reference" 
 				verbose="false" 
 				stylesheetfile="resources/stylesheet.css" 

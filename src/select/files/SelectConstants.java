@@ -36,7 +36,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 /**
- * Removed all resource files. Moved all valuable onstants into this file.
+ * Removed all resource files. Moved all valuable constants into this file.
  * This was done due to the way processing handles android builds.
  * 
  * @author ostap.andrusiv
@@ -73,6 +73,9 @@ public final class SelectConstants {
   static final int COLOR_UP = 0xFF33B5E5;
   
   /**
+   * 
+   * This method generates UI for the dialog.
+   * 
    * <pre>
    * 10: RelativeLayout
    *    20: LinearLayout
@@ -82,6 +85,9 @@ public final class SelectConstants {
    *          60: Button
    *  android.R.id.list: ListView
    *  </pre>
+   * 
+   * @param context Android context for UI.
+   * @return UI.
    */
   public static View generateMainActivityViews(Context context) {
     RelativeLayout rl = new RelativeLayout(context);

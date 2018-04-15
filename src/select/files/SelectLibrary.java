@@ -38,7 +38,7 @@ import android.os.Environment;
  * ##library.name## for android allow everyone to port existing sketches with
  * selectInput(), selectOutput(), selectFolder() calls.
  * 
- * @example Select
+ * Look at Select example.
  * 
  * Library open an android dialog, which, if successful selection was made, calls
  * the appropriate callback method.
@@ -58,13 +58,12 @@ public class SelectLibrary {
    * sent to the function, so that the program is not waiting for additional
    * input. The callback is necessary because of how android threading works.
    *
-   * @example Select
+   * Look at Select example.
    *
    * For advanced users, the method must be 'public', which is true for all
    * methods inside a sketch when run from the PDE, but must explicitly be
    * set when using Eclipse or other development environments.
    *
-   * @webref input:files
    * @param prompt message to the user
    * @param callback name of the method to be called when the selection is made
    */  
@@ -75,7 +74,6 @@ public class SelectLibrary {
   /**
    * See selectInput() for details.
    *
-   * @webref output:files
    * @param prompt message to the user
    * @param callback name of the method to be called when the selection is made
    */
@@ -86,7 +84,6 @@ public class SelectLibrary {
   /**
    * See selectInput() for details.
    *
-   * @webref input:files
    * @param prompt message to the user
    * @param callback name of the method to be called when the selection is made
    */

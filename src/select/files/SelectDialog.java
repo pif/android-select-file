@@ -54,11 +54,12 @@ import android.widget.TextView;
  *    <li>select file,</li>
  *    <li>select folder,</li>
  *    <li>save file</li>
+ *  </ul>
  * functionality.
  * <br>
  * <br>
  * Usage:
- * {@see FileLibrary}
+ * {@link SelectLibrary}
  *  
  * @author ostap.andrusiv
  *

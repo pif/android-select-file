@@ -97,7 +97,7 @@ public abstract class SelectMode implements FileFilter {
 
   /**
    * This method is called from the bound activity, when result should be selected.
-   * @param f
+   * @param f file, which was selected
    */
   public void selectResult(File f) {
     String isOkMessage = isOk(f);
