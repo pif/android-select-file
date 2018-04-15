@@ -303,7 +303,6 @@ ${line}
 	
 	<target name="generate.zip" if="is.normal">
 		<!-- zip the distribution of the library -->
-		
 		<move todir="${project.dist.version}/tmp/${project.name}-${library.version}">
   			<fileset dir="${project.dist.version}/${project.name}" />
   		</move>
@@ -311,8 +310,14 @@ ${line}
   		<copy file="${project.dist.version}/tmp/${project.name}-${library.version}/library.properties" tofile="${project.dist.version}/web/download/${project.name}-${library.version}.txt" />
 		<copy file="${project.dist.version}/tmp/${project.name}-${library.version}/library.properties" tofile="${project.dist.version}/web/download/${project.name}.txt" />
 		        
+		<!-- make AwesomeLib.zip/AwesomeLib/library/awesome-lib.jar structure -->
+		<mkdir dir="${project.dist.version}/tmp/structure/${project.name}" />
+		<move todir="${project.dist.version}/tmp/structure/${project.name}">
+  			<fileset dir="${project.dist.version}/tmp/${project.name}-${library.version}" />
+  		</move>
+		        
 		<zip destfile="${project.dist.version}/${project.name}-${library.version}.zip"
-  	       basedir="${project.dist.version}/tmp/${project.name}-${library.version}"
+  	       basedir="${project.dist.version}/tmp/structure"
   	       excludes="**/.DS_Store"
 		/>
 		
