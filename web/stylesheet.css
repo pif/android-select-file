@@ -52,13 +52,16 @@ body {
 	float:left;
 }
 
+#left {
+	float: left;
+}
+
 
 .clear {
 	clear:both;
 }
 
 #footer {
-	margin-top:300px;
 	height:20px;
 	margin-bottom:32px;
 }
