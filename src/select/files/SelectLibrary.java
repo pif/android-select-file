@@ -29,6 +29,7 @@ package select.files;
 import java.io.File;
 
 import processing.core.PApplet;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Environment;
@@ -115,11 +116,15 @@ public class SelectLibrary {
     i.putExtra(SelectDialog.EX_CALLBACK, callbackMethod);
     i.putExtra(SelectDialog.EX_TITLE, prompt);
     
-    parent.runOnUiThread(new Runnable() {
-        public void run() {
-          Dialog dlg = new SelectDialog(parent, i);
-          dlg.show();//startActivityForResult(i, RESULT_SELECT);
-        }
-    });
+    
+    Activity activity = parent.getActivity();
+    if (activity != null) {
+      activity.runOnUiThread(new Runnable() {
+          public void run() {
+            Dialog dlg = new SelectDialog(parent, i);
+            dlg.show();//startActivityForResult(i, RESULT_SELECT);
+          }
+      });
+    }
   }
 }
