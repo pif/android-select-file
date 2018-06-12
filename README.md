@@ -16,6 +16,13 @@ Tested with Processing 3.0.
 2. Search for `SelectFile`
 3. Click install.
 
+## Downloads or APDE Installation
+
+If you want to install SelectFile manually, you can find the latest binary package here:
+[http://andrusiv.com/android-select-file/download/SelectFile.zip](http://andrusiv.com/android-select-file/download/SelectFile.zip).
+
+If you're using APDE app, please download from the link mentioned above and import compressed library (.zip file) into APDE.
+
 ## Usage
 
 1. After you installed the library, check out an example here: `File > Examples > Contributed Libraries > SelectFile`.
