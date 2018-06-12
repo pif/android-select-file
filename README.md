@@ -10,13 +10,13 @@ Tested with Processing 3.0.
 
 ![Select File UI](web/android-select-file.gif?raw=true)
 
-## Installation
+## Installation into PDE
 
 1. In Processing go to `Sketches > Import Library > Add Library...`
 2. Search for `SelectFile`
 3. Click install.
 
-## Downloads or APDE Installation
+## Downloads or Installation into APDE
 
 If you want to install SelectFile manually, you can find the latest binary package here:
 [http://andrusiv.com/android-select-file/download/SelectFile.zip](http://andrusiv.com/android-select-file/download/SelectFile.zip).
