@@ -56,5 +56,5 @@ prettyVersion = 0.0.2  # This is treated as a String
 # Only use maxRevision (or minRevision), when your library is known to 
 # break in a later (or earlier) release. Otherwise, use the default value 0.
 
-minRevision = ##library.minRevision##
-maxRevision = ##library.maxRevision##
+minRevision = 228
+maxRevision = 0
