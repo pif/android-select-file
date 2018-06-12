@@ -224,6 +224,7 @@ ${line}
 				public="true" version="false" 
 				windowtitle="Javadocs: ${project.name}">
  			
+ 			<arg value="-notimestamp" />
  			<link href="${javadoc.java.href}" />
 			<link href="${javadoc.processing.href}" />
 			<taglet name="ExampleTaglet" path="resources/code" />
@@ -275,6 +276,9 @@ ${line}
     	        
         <replaceregexp file="${file}" match="##library.version##" replace="${library.version}" flags="g" />
         <replaceregexp file="${file}" match="##library.prettyVersion##" replace="${library.prettyVersion}" flags="g" /> 
+
+        <replaceregexp file="${file}" match="##library.minRevision##" replace="${library.minRevision}" flags="g" /> 
+        <replaceregexp file="${file}" match="##library.maxRevision##" replace="${library.maxRevision}" flags="g" /> 
         
         <replaceregexp file="${file}" match="##library.url##" replace="${library.url}" flags="g" />
         <replaceregexp file="${file}" match="##library.category##" replace="${library.category}" flags="g" />
