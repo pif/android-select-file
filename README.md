@@ -8,7 +8,11 @@ Android has no default Open & Save file dialogs.
 
 Tested with Processing 3.0. 
 
-![Select File UI](web/android-select-file.gif?raw=true)
+![Select File UI All Features](web/android-select-file-all-features.gif?raw=true) | ![Select File UI](web/android-select-file.gif?raw=true)
+:-------------------------:|:-------------------------:
+ All `SelectFile` features | `.selectFile()` in action 
+
+Check library examples to see related code.
 
 ## Installation into PDE
 
